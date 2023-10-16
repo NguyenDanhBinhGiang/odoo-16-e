@@ -13,7 +13,7 @@ VOLUME "/server"
 # Generate locale C.UTF-8 for postgres and general locale data
 ENV LANG C.UTF-8
 
-# Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
+RUN echo -e '\033[31m Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf \033[0m'
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -46,7 +46,7 @@ RUN apt-get update && \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
     && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
-# install latest postgresql-client
+RUN echo -e '\033[31m install latest postgresql-client \033[0m'
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
     && GNUPGHOME="$(mktemp -d)" \
     && export GNUPGHOME \
@@ -60,10 +60,11 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' > /et
     && rm -f /etc/apt/sources.list.d/pgdg.list \
     && rm -rf /var/lib/apt/lists/*
 
-# Install rtlcss (on Debian buster)
+RUN echo -e '\033[31m Install rtlcss (on Debian buster) \033[0m'
 RUN npm install -g rtlcss
 
 # install python packages
+RUN echo -e '\033[31m install python packages \033[0m'
 RUN pip3 install --upgrade setuptools && pip3 install --upgrade wheel &&  pip3 install openpyxl
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
@@ -80,10 +81,12 @@ RUN pip3 install -r requirements.txt
 
 
 # Copy entrypoint script and Odoo configuration file
+RUN echo -e '\033[31m Copy entrypoint script and Odoo configuration file \033[0m'
 COPY ./entrypoint.sh /
 #COPY ./odoo.conf /etc/odoo/
 
 # Set permissions and Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
+RUN echo -e '\033[31m Set permissions and Mount \033[0m'
 #RUN chown odoo /etc/odoo/odoo.conf \
 #    && mkdir -p /mnt/extra-addons \
 #    && chown -R odoo /mnt/extra-addons
@@ -99,7 +102,8 @@ EXPOSE 8069 8071 8072
 # Set the default config file
 #ENV ODOO_RC /etc/odoo/odoo.conf
 
-COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
+COPY wait-for-psql.py /server/wait-for-psql.py
+COPY run_server.sh /server/run_server.sh
 
 # Copy add-ons
 #COPY ./custom_addon /mnt/extra-addons/
