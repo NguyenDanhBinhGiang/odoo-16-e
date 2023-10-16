@@ -1,0 +1,35 @@
+#version: "0.1"
+services:
+  postgres:
+    image: "postgres:12"
+    volumes:
+      - ./backup:/mnt/backup
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=1
+      - POSTGRES_DB=odoo
+    ports:
+      - "5434:5432"
+    container_name: odoo-db
+    networks:
+      - odoo-network
+
+  odoo:
+    build: .
+#      context: .
+#      dockerfile: Dockerfile
+#      target: final
+    ports:
+      - "80:8069"
+    volumes:
+      - .:/server
+#    read_only: true
+    container_name: odoo-practice
+    depends_on:
+      - "postgres"
+    networks:
+      - odoo-network
+
+networks:
+  odoo-network:
+    name: odoo-network
