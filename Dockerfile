@@ -114,4 +114,4 @@ EXPOSE 8069 8071 8072
 USER odoo
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/server/run_server.sh"]
+CMD ["/run_server.sh"]
