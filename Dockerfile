@@ -7,8 +7,8 @@ SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 RUN mkdir "/server"
 RUN mkdir "/etc/odoo-data"
 WORKDIR /server
-#COPY . .
-VOLUME "/server"
+COPY . .
+#VOLUME "/server"
 
 # Generate locale C.UTF-8 for postgres and general locale data
 ENV LANG C.UTF-8
@@ -82,7 +82,7 @@ RUN pip3 install -r requirements.txt
 
 # Copy entrypoint script and Odoo configuration file
 RUN echo -e '\033[31m Copy entrypoint script and Odoo configuration file \033[0m'
-COPY ./entrypoint.sh /
+#COPY ./entrypoint.sh /
 #COPY ./odoo.conf /etc/odoo/
 
 # Set permissions and Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
@@ -102,8 +102,8 @@ EXPOSE 8069 8071 8072
 # Set the default config file
 #ENV ODOO_RC /etc/odoo/odoo.conf
 
-COPY wait-for-psql.py /server/wait-for-psql.py
-COPY run_server.sh /server/run_server.sh
+#COPY wait-for-psql.py /server/wait-for-psql.py
+#COPY run_server.sh /server/run_server.sh
 
 # Copy add-ons
 #COPY ./custom_addon /mnt/extra-addons/
