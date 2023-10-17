@@ -19,7 +19,7 @@ echo "PARAMS: " "${DB_ARGS[@]}"
 if [ ! -f /etc/init_odoo.lock ]; then
     echo "Odoo server need init!" &&
     touch /etc/odoo-config/init_odoo.lock &&
-    python3 /server/odoo-bin -c /server/setup/odoo-server.conf "${DB_ARGS[@]}" -i base --stop-after-init &&
+    python3 ./odoo-bin -c /server/setup/odoo-server.conf "${DB_ARGS[@]}" -i base --stop-after-init &&
     echo "Odoo server init successful"
 fi
-python3 /server/odoo-bin -c /server/setup/odoo-server.conf "${DB_ARGS[@]}"
+python3 ./odoo-bin -c /server/setup/odoo-server.conf "${DB_ARGS[@]}"

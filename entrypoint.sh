@@ -24,10 +24,6 @@ function check_config() {
     DB_ARGS+=("${value}")
 }
 
-check_config "db_host" "$HOST"
-check_config "db_port" "$PORT"
-check_config "db_user" "$USER"
-check_config "db_password" "$PASSWORD"
 
 case "$1" in
     -- | odoo)
@@ -35,11 +31,19 @@ case "$1" in
         if [[ "$1" == "scaffold" ]] ; then
             exec odoo "$@"
         else
+            check_config "db_host" "$HOST"
+            check_config "db_port" "$PORT"
+            check_config "db_user" "$USER"
+            check_config "db_password" "$PASSWORD"
             wait-for-psql.py ${DB_ARGS[@]} --timeout=30
             exec odoo "$@" "${DB_ARGS[@]}"
         fi
         ;;
     -*)
+        check_config "db_host" "$HOST"
+        check_config "db_port" "$PORT"
+        check_config "db_user" "$USER"
+        check_config "db_password" "$PASSWORD"
         wait-for-psql.py ${DB_ARGS[@]} --timeout=30
         exec odoo "$@" "${DB_ARGS[@]}"
         ;;
