@@ -97,7 +97,7 @@ RUN chown odoo -R /server \
     && chown -R odoo /etc/odoo-config
 
 # Expose Odoo services
-EXPOSE 8069 8071 8072
+EXPOSE 10000 8071 8072
 
 # Set the default config file
 #ENV ODOO_RC /etc/odoo/odoo.conf
