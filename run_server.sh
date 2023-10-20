@@ -10,7 +10,7 @@ function check_config() {
 }
 
 check_config "db_host" "$HOST"
-check_config "db_port" "$PORT"
+check_config "db_port" "$DB_PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
 
