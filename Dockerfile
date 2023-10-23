@@ -5,10 +5,12 @@ MAINTAINER Odoo S.A. <info@odoo.com>
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
 RUN useradd -ms /bin/bash odoo
-RUN mkdir "/server" &&  \
-    mkdir "/etc/odoo-data" &&  \
-    mkdir -p /etc/odoo-config \
-    && chown -R odoo /etc/odoo-config
+RUN mkdir /server &&  \
+    chown -R odoo /server && \
+    mkdir -p /etc/odoo-data &&  \
+    chown -R odoo /etc/odoo-data && \
+    mkdir -p /etc/odoo-config  &&  \
+    chown -R odoo /etc/odoo-config
 WORKDIR /server
 
 # Generate locale C.UTF-8 for postgres and general locale data
