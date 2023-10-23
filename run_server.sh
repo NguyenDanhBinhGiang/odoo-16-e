@@ -20,6 +20,7 @@ echo "PARAMS: " "${DB_ARGS[@]}"
 if [ ! -f /etc/init_odoo.lock ]; then
     echo "Odoo server need init!" &&
     touch /etc/odoo-config/init_odoo.lock &&
+    psql postgres://$USER:$PASSWORD@$HOST:$DB_PORT/$DB_NAME -c "select 'drop table if exists \"' || tablename || '\" cascade;'  from pg_tables where schemaname = 'public';"&&
     python3 ./odoo-bin -c /server/setup/odoo-server.conf "${DB_ARGS[@]}" -i base --stop-after-init &&
     echo "Odoo server init successful"
 fi
