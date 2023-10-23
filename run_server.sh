@@ -25,7 +25,7 @@ echo "PARAMS: " "${DB_ARGS[@]}"
 if [ ! -f /etc/init_odoo.lock ]; then
     echo "Odoo server need init!" && \
     touch /etc/odoo-config/init_odoo.lock && \
-    psql postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$DB_NAME' AND pid <> pg_backend_pid(); select 'drop table if exists \"' || tablename || '\" cascade;'  from pg_tables where schemaname = 'public';"&& \
+    psql postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME -c --quiet  "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$DB_NAME' AND pid <> pg_backend_pid(); select 'drop table if exists \"' || tablename || '\" cascade;'  from pg_tables where schemaname = 'public';"&& \
     echo "Initializing..." && \
     python3 ./odoo-bin -c /server/setup/odoo-server.conf --db_host satao.db.elephantsql.com --db_user gyufpkyg --db_password ysAWVA_u74TwGb0Obp-7N4y4tUbERCIB --database gyufpkyg -i base --stop-after-init &&
     echo "Odoo server init successful"
