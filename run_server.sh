@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DB_ARGS=()
 function check_config() {
     param="$1"
@@ -9,18 +11,18 @@ function check_config() {
     DB_ARGS+=("${value}")
 }
 
-check_config "db_host" "$HOST"
+check_config "db_host" "$DB_HOST"
 check_config "db_port" "$DB_PORT"
-check_config "db_user" "$USER"
-check_config "db_password" "$PASSWORD"
+check_config "db_user" "$DB_USER"
+check_config "db_password" "$DB_PASSWORD"
 check_config "db_name" "$DB_NAME"
 
 echo "PARAMS: " "${DB_ARGS[@]}"
-
+./wait-for-psql.py ${DB_ARGS[@]} --timeout=30
 if [ ! -f /etc/init_odoo.lock ]; then
     echo "Odoo server need init!" &&
     touch /etc/odoo-config/init_odoo.lock &&
-    psql postgres://$USER:$PASSWORD@$HOST:$DB_PORT/$DB_NAME -c "select 'drop table if exists \"' || tablename || '\" cascade;'  from pg_tables where schemaname = 'public';"&&
+    psql postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME -c "select 'drop table if exists \"' || tablename || '\" cascade;'  from pg_tables where schemaname = 'public';"&&
     python3 ./odoo-bin -c /server/setup/odoo-server.conf "${DB_ARGS[@]}" -i base --stop-after-init &&
     echo "Odoo server init successful"
 fi

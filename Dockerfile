@@ -4,11 +4,12 @@ MAINTAINER Odoo S.A. <info@odoo.com>
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
-RUN mkdir "/server"
-RUN mkdir "/etc/odoo-data"
+RUN mkdir "/server" &&  \
+    mkdir "/etc/odoo-data" &&  \
+    mkdir -p /etc/odoo-config \
+    && chown -R odoo /etc/odoo-config
 WORKDIR /server
-COPY . .
-#VOLUME "/server"
+RUN useradd -ms /bin/bash odoo
 
 # Generate locale C.UTF-8 for postgres and general locale data
 ENV LANG C.UTF-8
@@ -69,49 +70,12 @@ RUN pip3 install --upgrade setuptools && pip3 install --upgrade wheel &&  pip3 i
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
-# Install Odoo
-#ENV ODOO_VERSION 15.0
-#ARG ODOO_RELEASE=20221025
-#ARG ODOO_SHA=923fdec85ac9a4230fc93af00d12d8911a0613b4
-#RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION}.${ODOO_RELEASE}_all.deb \
-#    && echo "${ODOO_SHA} odoo.deb" | sha1sum -c - \
-#    && apt-get update \
-#    && apt-get -y install --no-install-recommends ./odoo.deb \
-#    && rm -rf /var/lib/apt/lists/* odoo.deb
-
-
-# Copy entrypoint script and Odoo configuration file
-RUN echo -e '\033[31m Copy entrypoint script and Odoo configuration file \033[0m'
-#COPY ./entrypoint.sh /
-#COPY ./odoo.conf /etc/odoo/
-
-# Set permissions and Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
-RUN echo -e '\033[31m Set permissions and Mount \033[0m'
-#RUN chown odoo /etc/odoo/odoo.conf \
-#    && mkdir -p /mnt/extra-addons \
-#    && chown -R odoo /mnt/extra-addons
-#VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
-RUN useradd -ms /bin/bash odoo
-RUN chown odoo -R /server \
-    && mkdir -p /etc/odoo-config \
-    && chown -R odoo /etc/odoo-config
+COPY --chown=odoo . .
 
 # Expose Odoo services
 EXPOSE 10000 8071 8072
 
-# Set the default config file
-#ENV ODOO_RC /etc/odoo/odoo.conf
-
-#COPY wait-for-psql.py /server/wait-for-psql.py
-#COPY run_server.sh /server/run_server.sh
-
-# Copy add-ons
-#COPY ./custom_addon /mnt/extra-addons/
-#COPY ./enterpriseaddons /mnt/extra-addons/
-
-# Set default user when running the container
-#usermod -u 1000 odoo
 USER odoo
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/run_server.sh"]
+#ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/server/run_server.sh"]
