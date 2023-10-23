@@ -3,12 +3,15 @@
 DB_ARGS=()
 function check_config() {
     param="$1"
-    value="$2"
-#    if grep -q -E "^\s*\b${param}\b\s*=" "$ODOO_RC" ; then
-#        value=$(grep -E "^\s*\b${param}\b\s*=" "$ODOO_RC" |cut -d " " -f3|sed 's/["\n\r]//g')
-#    fi;
-    DB_ARGS+=("--${param}")
-    DB_ARGS+=("${value}")
+    if [[ -n "$2" ]]
+    then
+#        echo "not Empty";
+        value="$2"
+        DB_ARGS+=("--${param}")
+        DB_ARGS+=("${value}")
+#    else
+#        echo "empty"
+    fi
 }
 
 check_config "db_host" "$DB_HOST"
