@@ -8,7 +8,7 @@ import time
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--db_host', required=True)
-    arg_parser.add_argument('--db_port', required=True)
+    arg_parser.add_argument('--db_port', required=False)
     arg_parser.add_argument('--db_user', required=True)
     arg_parser.add_argument('--db_password', required=True)
     arg_parser.add_argument('--database', required=True)
