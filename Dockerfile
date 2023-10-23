@@ -70,7 +70,7 @@ RUN pip3 install --upgrade setuptools && pip3 install --upgrade wheel &&  pip3 i
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
-COPY --link --chown=odoo . .
+COPY --chown=odoo . .
 
 # Expose Odoo services
 EXPOSE 10000 8071 8072
