@@ -18,7 +18,7 @@ check_config "db_host" "$DB_HOST"
 check_config "db_port" "$DB_PORT"
 check_config "db_user" "$DB_USER"
 check_config "db_password" "$DB_PASSWORD"
-check_config "db_name" "$DB_NAME"
+check_config "database" "$DB_NAME"
 
 echo "PARAMS: " "${DB_ARGS[@]}"
 ./wait-for-psql.py ${DB_ARGS[@]} --timeout=30
