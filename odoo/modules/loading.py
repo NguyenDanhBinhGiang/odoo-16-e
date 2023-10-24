@@ -395,7 +395,7 @@ def load_modules(registry, force_demo=False, status=None, update_module=False):
         # installs) if a concurrent transaction has accessed the table;
         # connection settings are automatically reset when the connection is
         # borrowed from the pool
-        cr.execute("SET SESSION lock_timeout = '15s'")
+        cr.execute("SET SESSION lock_timeout = '30s'")
         if not odoo.modules.db.is_initialized(cr):
             if not update_module:
                 _logger.error("Database %s not initialized, you can force it with `-i base`", cr.dbname)
